@@ -1,4 +1,4 @@
-package com.nothinglondon.sdkdemo.demos
+package com.evirunurm.nothinglyph.service
 
 import android.app.Service
 import android.content.ComponentName

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.nothinglondon.sdkdemo"
+    namespace = "com.evirnurm.nothinglyph"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.nothinglondon.sdkdemo"
+        applicationId = "com.evirnurm.nothinglyph"
         minSdk = 34
         targetSdk = 35
         versionCode = 1
@@ -43,6 +43,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

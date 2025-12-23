@@ -1,8 +1,8 @@
-package com.nothinglondon.sdkdemo.demos.animation
+package com.evirunurm.nothinglyph.demos.animation
 
 import android.content.Context
 import com.nothing.ketchum.GlyphMatrixManager
-import com.nothinglondon.sdkdemo.demos.GlyphMatrixService
+import com.evirunurm.nothinglyph.service.GlyphMatrixService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel

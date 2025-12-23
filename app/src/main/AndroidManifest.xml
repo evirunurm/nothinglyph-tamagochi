@@ -21,7 +21,7 @@
             android:value="test" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.evirunurm.nothinglyph.tamagochi.framework.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.NothingAndroidSDKDemo">
             <intent-filter>
@@ -33,7 +33,7 @@
 
         <!-- Basic Demo Service -->
         <service
-            android:name=".demos.basic.BasicDemoService"
+            android:name="com.evirunurm.nothinglyph.demos.basic.BasicDemoService"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
@@ -56,7 +56,7 @@
 
         <!-- Animation Demo Service -->
         <service
-            android:name=".demos.animation.AnimationDemoService"
+            android:name="com.evirunurm.nothinglyph.demos.animation.AnimationDemoService"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
@@ -79,7 +79,7 @@
 
         <!-- Glyph Button Demo Service -->
         <service
-            android:name=".demos.glyphbutton.GlyphButtonDemoService"
+            android:name="com.evirunurm.nothinglyph.demos.glyphbutton.GlyphButtonDemoService"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
@@ -99,6 +99,36 @@
                 android:name="com.nothing.glyph.toy.longpress"
                 android:value="1" />
         </service>
+
+        <!-- Tamagochi Service -->
+        <service
+            android:name="com.evirunurm.nothinglyph.tamagochi.framework.service.TamagochiGlyphService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.nothing.glyph.TOY" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.nothing.glyph.toy.name"
+                android:resource="@string/toy_name_tamagochi" />
+            <meta-data
+                android:name="com.nothing.glyph.toy.image"
+                android:resource="@drawable/tamagochi_thumbnail" />
+            <meta-data
+                android:name="com.nothing.glyph.toy.summary"
+                android:resource="@string/toy_summary_tamagochi" />
+            <meta-data
+                android:name="com.nothing.glyph.toy.longpress"
+                android:value="1" />
+        </service>
+
+        <receiver android:name="com.evirunurm.nothinglyph.tamagochi.framework.receiver.DecreaseReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="DECREASE_SIZE" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

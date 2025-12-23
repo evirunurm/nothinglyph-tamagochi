@@ -1,4 +1,4 @@
-package com.nothinglondon.sdkdemo
+package com.evirunurm.nothinglyph
 
 import org.junit.Test
 

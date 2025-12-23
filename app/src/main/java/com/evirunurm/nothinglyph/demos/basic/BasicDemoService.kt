@@ -1,13 +1,13 @@
-package com.nothinglondon.sdkdemo.demos.basic
+package com.evirunurm.nothinglyph.demos.basic
 
 import android.content.Context
 import androidx.core.content.ContextCompat
+import com.evirnurm.nothinglyph.R
 import com.nothing.ketchum.GlyphMatrixFrame
 import com.nothing.ketchum.GlyphMatrixManager
 import com.nothing.ketchum.GlyphMatrixObject
 import com.nothing.ketchum.GlyphMatrixUtils
-import com.nothinglondon.sdkdemo.R
-import com.nothinglondon.sdkdemo.demos.GlyphMatrixService
+import com.evirunurm.nothinglyph.service.GlyphMatrixService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -15,7 +15,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 

@@ -1,8 +1,8 @@
-package com.nothinglondon.sdkdemo.demos.glyphbutton
+package com.evirunurm.nothinglyph.demos.glyphbutton
 
 import android.content.Context
 import com.nothing.ketchum.GlyphMatrixManager
-import com.nothinglondon.sdkdemo.demos.GlyphMatrixService
+import com.evirunurm.nothinglyph.service.GlyphMatrixService
 import kotlin.random.Random
 
 class GlyphButtonDemoService : GlyphMatrixService("Glyph-Button-Demo") {

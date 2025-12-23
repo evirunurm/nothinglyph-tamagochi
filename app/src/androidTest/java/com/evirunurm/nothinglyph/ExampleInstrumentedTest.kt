@@ -1,4 +1,4 @@
-package com.nothinglondon.sdkdemo
+package com.evirunurm.nothinglyph
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
