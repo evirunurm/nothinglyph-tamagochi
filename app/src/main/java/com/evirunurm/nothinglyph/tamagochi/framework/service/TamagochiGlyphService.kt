@@ -48,9 +48,10 @@ class TamagochiGlyphService : GlyphMatrixService("Tamagochi") {
     }
 
     private fun displaySquare(size: Int, glyphMatrixManager: GlyphMatrixManager) {
+        val visualSize = 2 * size - 1
         val array = IntArray(GLYPH_ARRAY_SIZE) { 0 }
         val center = GLYPH_WIDTH / 2
-        val half = size / 2
+        val half = visualSize / 2
         val startX = center - half
         val endX = center + half
         val startY = center - half

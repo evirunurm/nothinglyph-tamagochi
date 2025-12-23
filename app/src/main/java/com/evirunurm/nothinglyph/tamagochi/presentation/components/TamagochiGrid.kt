@@ -20,8 +20,9 @@ fun TamagochiGrid(
     modifier: Modifier = Modifier
 ) {
     fun calculateSquarePosition(gridSize: Int, size: Int):SquarePosition {
+        val visualSize = 2 * size - 1
         val center = gridSize / 2
-        val half = size / 2
+        val half = visualSize / 2
         val startX = center - half
         val endX = center + half
         val startY = center - half
@@ -75,4 +76,3 @@ fun TamagochiGrid(
         }
     }
 }
-
