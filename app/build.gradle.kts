@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.nothinglondon.sdkdemo"
+    namespace = "com.evirnurm.nothinglyph"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.nothinglondon.sdkdemo"
+        applicationId = "com.evirnurm.nothinglyph"
         minSdk = 34
         targetSdk = 35
         versionCode = 1
