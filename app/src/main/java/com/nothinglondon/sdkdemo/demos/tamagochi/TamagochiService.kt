@@ -1,30 +1,51 @@
 package com.nothinglondon.sdkdemo.demos.tamagochi
 
+import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
+import android.content.IntentFilter
+import android.util.Log
 import com.nothing.ketchum.GlyphMatrixManager
 import com.nothinglondon.sdkdemo.demos.GlyphMatrixService
-import androidx.core.content.edit
 
 class TamagochiService : GlyphMatrixService("Tamagochi") {
 
-    private lateinit var prefs: SharedPreferences
-    private var size = 1
+    private lateinit var repository: TamagochiRepository
+    private var sizeChangeReceiver: BroadcastReceiver? = null
 
     override fun performOnServiceConnected(
         context: Context,
         glyphMatrixManager: GlyphMatrixManager
     ) {
-        prefs = context.getSharedPreferences("tamagochi_prefs", MODE_PRIVATE)
-        size = prefs.getInt("size", 1)
+        Log.d("TamagochiService", "Service connected")
+        repository = TamagochiRepository.getInstance(context)
+        val size = repository.getSize()
         displaySquare(size, glyphMatrixManager)
+
+        repository.startDecreasing()
+
+        sizeChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val newSize = intent?.getIntExtra(TamagochiRepository.EXTRA_SIZE, repository.getSize()) ?: repository.getSize()
+                Log.d("TamagochiService", "Received size change broadcast, updating glyph to size $newSize")
+                glyphMatrixManager.let { displaySquare(newSize, it) }
+            }
+        }
+        val filter = IntentFilter(TamagochiRepository.ACTION_SIZE_CHANGED)
+        context.registerReceiver(sizeChangeReceiver, filter, RECEIVER_EXPORTED)
+    }
+
+    override fun performOnServiceDisconnected(context: Context) {
+        Log.d("TamagochiService", "Service disconnected")
+        sizeChangeReceiver?.let { context.unregisterReceiver(it) }
+        sizeChangeReceiver = null
     }
 
     override fun onTouchPointLongPress() {
-        size++
-        if (size > 25) size = 1
-        prefs.edit { putInt("size", size) }
-        glyphMatrixManager?.let { displaySquare(size, it) }
+        Log.d("TamagochiService", "Long press detected, increasing size")
+        repository.increaseSize()
+        val newSize = repository.getSize()
+        glyphMatrixManager?.let { displaySquare(newSize, it) }
     }
 
     private fun displaySquare(size: Int, glyphMatrixManager: GlyphMatrixManager) {

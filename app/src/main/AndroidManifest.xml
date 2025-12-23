@@ -123,6 +123,13 @@
                 android:value="1" />
         </service>
 
+        <receiver android:name=".demos.tamagochi.DecreaseReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="DECREASE_SIZE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
