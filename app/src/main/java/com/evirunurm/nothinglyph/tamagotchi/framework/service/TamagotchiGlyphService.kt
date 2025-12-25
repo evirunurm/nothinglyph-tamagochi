@@ -1,4 +1,4 @@
-package com.evirunurm.nothinglyph.tamagochi.framework.service
+package com.evirunurm.nothinglyph.tamagotchi.framework.service
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,19 +7,19 @@ import android.content.IntentFilter
 import android.util.Log
 import com.evirunurm.nothinglyph.service.GlyphMatrixService
 import com.nothing.ketchum.GlyphMatrixManager
-import com.evirunurm.nothinglyph.tamagochi.data.repositories.TamagochiRepository
+import com.evirunurm.nothinglyph.tamagotchi.data.repositories.TamagotchiRepository
 
-class TamagochiGlyphService : GlyphMatrixService("Tamagochi") {
+class TamagotchiGlyphService : GlyphMatrixService("Tamagotchi") {
 
-    private lateinit var repository: TamagochiRepository
+    private lateinit var repository: TamagotchiRepository
     private var sizeChangeReceiver: BroadcastReceiver? = null
 
     override fun performOnServiceConnected(
         context: Context,
         glyphMatrixManager: GlyphMatrixManager
     ) {
-        Log.d("TamagochiService", "Service connected")
-        repository = TamagochiRepository.getInstance(context)
+        Log.d("TamagotchiService", "Service connected")
+        repository = TamagotchiRepository.getInstance(context)
         val size = repository.getSize()
         displaySquare(size, glyphMatrixManager)
 
@@ -27,23 +27,23 @@ class TamagochiGlyphService : GlyphMatrixService("Tamagochi") {
 
         sizeChangeReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                val newSize = intent?.getIntExtra(TamagochiRepository.EXTRA_SIZE, repository.getSize()) ?: repository.getSize()
-                Log.d("TamagochiService", "Received size change broadcast, updating glyph to size $newSize")
+                val newSize = intent?.getIntExtra(TamagotchiRepository.EXTRA_SIZE, repository.getSize()) ?: repository.getSize()
+                Log.d("TamagotchiService", "Received size change broadcast, updating glyph to size $newSize")
                 glyphMatrixManager.let { displaySquare(newSize, it) }
             }
         }
-        val filter = IntentFilter(TamagochiRepository.ACTION_SIZE_CHANGED)
+        val filter = IntentFilter(TamagotchiRepository.ACTION_SIZE_CHANGED)
         context.registerReceiver(sizeChangeReceiver, filter, RECEIVER_EXPORTED)
     }
 
     override fun performOnServiceDisconnected(context: Context) {
-        Log.d("TamagochiService", "Service disconnected")
+        Log.d("TamagotchiService", "Service disconnected")
         sizeChangeReceiver?.let { context.unregisterReceiver(it) }
         sizeChangeReceiver = null
     }
 
     override fun onTouchPointLongPress() {
-        Log.d("TamagochiService", "Long press detected, increasing size")
+        Log.d("TamagotchiService", "Long press detected, increasing size")
         repository.increaseSize()
     }
 
