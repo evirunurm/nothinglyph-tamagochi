@@ -6,13 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-
-data class SquarePosition(
-    val startX: Int,
-    val endX: Int,
-    val startY: Int,
-    val endY: Int
-)
+import com.evirunurm.nothinglyph.tamagotchi.domain.TamagotchiShape
 
 private val SHAPE = setOf(
     0 to 9, 0 to 10, 0 to 11, 0 to 12, 0 to 13, 0 to 14, 0 to 15,
@@ -47,17 +41,6 @@ fun TamagotchiGrid(
     size: Int,
     modifier: Modifier = Modifier
 ) {
-    fun calculateSquarePosition(gridSize: Int, size: Int):SquarePosition {
-        val visualSize = 2 * size - 1
-        val center = gridSize / 2
-        val half = visualSize / 2
-        val startX = center - half
-        val endX = center + half
-        val startY = center - half
-        val endY = center + half
-        return SquarePosition(startX, endX, startY, endY)
-    }
-
     Canvas(modifier = modifier) {
         val gridSize = 25
         val cellSize = this.size.width / gridSize
@@ -78,11 +61,11 @@ fun TamagotchiGrid(
             )
         }
 
-        val (startX, endX, startY, endY) = calculateSquarePosition(gridSize, size)
+        val shape = TamagotchiShape(size)
 
         // Draw the filled square (shape)
-        for (x in startX..endX) {
-            for (y in startY..endY) {
+        for (x in shape.startX..shape.endX) {
+            for (y in shape.startY..shape.endY) {
                 if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
                     drawRect(
                         color = Color.White,
