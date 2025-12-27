@@ -10,8 +10,8 @@ package com.evirunurm.nothinglyph.tamagotchi.domain
  */
 data class TamagotchiShape(
     val size: Int,
-    val gridWidth: Int = DEFAULT_GRID_WIDTH,
-    val gridHeight: Int = DEFAULT_GRID_HEIGHT
+    val gridWidth: Int = DEFAULT_GRID_SIZE,
+    val gridHeight: Int = DEFAULT_GRID_SIZE
 ) {
     val visualSize: Int = 2 * size - 1
 
@@ -46,8 +46,7 @@ data class TamagotchiShape(
     }
 
     companion object {
-        const val DEFAULT_GRID_WIDTH = 25
-        const val DEFAULT_GRID_HEIGHT = 25
+        const val DEFAULT_GRID_SIZE = 25
         const val MAX_BRIGHTNESS = 2047
     }
 }
