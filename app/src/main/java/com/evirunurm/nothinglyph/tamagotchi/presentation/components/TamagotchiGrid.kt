@@ -78,24 +78,38 @@ private fun DrawScope.drawTamagotchiShape(size: Int, cellSize: Float) {
 }
 
 private fun DrawScope.drawGridLines(cellSize: Float) {
-    val columns = CIRCULAR_BORDER_PATTERN.map { it.second }.toSet()
+    for ((row, column) in CIRCULAR_BORDER_PATTERN) {
+        // Vertical line
+        drawLine(
+            color = Color.Gray.copy(alpha = 0.2f),
+            start = Offset(row * cellSize, column * cellSize),
+            end = Offset(row * cellSize, (column + 1) * cellSize),
+            strokeWidth = 1f
+        )
+        // Horizontal line
+        drawLine(
+            color = Color.Gray.copy(alpha = 0.2f),
+            start = Offset(row * cellSize, column * cellSize),
+            end = Offset((row + 1) * cellSize, column * cellSize),
+            strokeWidth = 1f
+        )
 
-    for (column in columns) {
-        val rows = CIRCULAR_BORDER_PATTERN.filter { it.second == column }.map { it.first }.toSet()
-        for (row in rows) {
-            // Vertical lines
+        // Right vertical line, if there's no cell to the right
+        if ((row + 1 to column) !in CIRCULAR_BORDER_PATTERN) {
             drawLine(
-                color = Color.Gray.copy(alpha = 0.3f),
-                start = Offset(row * cellSize, column * cellSize),
-                end = Offset((row) * cellSize, (column + 1) * cellSize),
+                color = Color.Gray.copy(alpha = 0.2f),
+                start = Offset((row + 1) * cellSize, column * cellSize),
+                end = Offset((row + 1) * cellSize, (column + 1) * cellSize),
                 strokeWidth = 1f
             )
+        }
 
-            // Horizontal lines
+        // Bottom horizontal line, if there's no cell below
+        if ((row to column + 1) !in CIRCULAR_BORDER_PATTERN) {
             drawLine(
-                color = Color.Gray.copy(alpha = 0.3f),
-                start = Offset(row * cellSize, column * cellSize),
-                end = Offset((row + 1) * cellSize, (column) * cellSize),
+                color = Color.Gray.copy(alpha = 0.2f),
+                start = Offset(row * cellSize, (column + 1) * cellSize),
+                end = Offset((row + 1) * cellSize, (column + 1) * cellSize),
                 strokeWidth = 1f
             )
         }
