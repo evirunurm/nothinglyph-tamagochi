@@ -7,6 +7,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import com.evirunurm.nothinglyph.tamagotchi.domain.TamagotchiShape
 
 private val CIRCULAR_BORDER_PATTERN = setOf(
@@ -45,16 +46,17 @@ fun TamagotchiGrid(
     Canvas(modifier = modifier) {
         val cellSize = this.size.width / TamagotchiShape.DEFAULT_GRID_SIZE
 
-        drawBackground(cellSize)
+        drawBorder(Color(0xFF000000))
+        drawBackground(cellSize, Color(0xFF1C1C1C))
         drawTamagotchiShape(size, cellSize)
-        drawGridLines(cellSize)
+        drawGridLines(cellSize, Color(0xFF000000))
     }
 }
 
-private fun DrawScope.drawBackground(cellSize: Float) {
+private fun DrawScope.drawBackground(cellSize: Float, color: Color) {
     for ((x, y) in CIRCULAR_BORDER_PATTERN) {
         drawRect(
-            color = Color.Black,
+            color = color,
             topLeft = Offset(x * cellSize, y * cellSize),
             size = Size(cellSize, cellSize)
         )
@@ -77,41 +79,55 @@ private fun DrawScope.drawTamagotchiShape(size: Int, cellSize: Float) {
     }
 }
 
-private fun DrawScope.drawGridLines(cellSize: Float) {
+private fun DrawScope.drawGridLines(cellSize: Float, color: Color) {
+    val strokeWidth = 10f
     for ((row, column) in CIRCULAR_BORDER_PATTERN) {
         // Vertical line
         drawLine(
-            color = Color.Gray.copy(alpha = 0.2f),
-            start = Offset(row * cellSize, column * cellSize),
-            end = Offset(row * cellSize, (column + 1) * cellSize),
-            strokeWidth = 1f
+            color = color,
+            start = Offset((row * cellSize), (column * cellSize) - strokeWidth / 2),
+            end = Offset(row * cellSize, ((column + 1) * cellSize) + strokeWidth / 2),
+            strokeWidth = strokeWidth
         )
         // Horizontal line
         drawLine(
-            color = Color.Gray.copy(alpha = 0.2f),
-            start = Offset(row * cellSize, column * cellSize),
-            end = Offset((row + 1) * cellSize, column * cellSize),
-            strokeWidth = 1f
+            color = color,
+            start = Offset((row * cellSize) - strokeWidth / 2, column * cellSize),
+            end = Offset(((row + 1) * cellSize) + strokeWidth / 2, column * cellSize),
+            strokeWidth = strokeWidth
         )
 
         // Right vertical line, if there's no cell to the right
         if ((row + 1 to column) !in CIRCULAR_BORDER_PATTERN) {
             drawLine(
-                color = Color.Gray.copy(alpha = 0.2f),
-                start = Offset((row + 1) * cellSize, column * cellSize),
-                end = Offset((row + 1) * cellSize, (column + 1) * cellSize),
-                strokeWidth = 1f
+                color = color,
+                start = Offset((row + 1) * cellSize, (column * cellSize) - strokeWidth / 2),
+                end = Offset((row + 1) * cellSize, ((column + 1) * cellSize) + strokeWidth / 2),
+                strokeWidth = strokeWidth
             )
         }
 
         // Bottom horizontal line, if there's no cell below
         if ((row to column + 1) !in CIRCULAR_BORDER_PATTERN) {
             drawLine(
-                color = Color.Gray.copy(alpha = 0.2f),
-                start = Offset(row * cellSize, (column + 1) * cellSize),
-                end = Offset((row + 1) * cellSize, (column + 1) * cellSize),
-                strokeWidth = 1f
+                color = color,
+                start = Offset((row * cellSize) - strokeWidth / 2, (column + 1) * cellSize),
+                end = Offset(((row + 1) * cellSize) + strokeWidth / 2, (column + 1) * cellSize),
+                strokeWidth = strokeWidth
             )
         }
     }
+}
+
+private fun DrawScope.drawBorder(color: Color) {
+    val halfGridSize = TamagotchiShape.DEFAULT_GRID_SIZE.toFloat() / 2
+    val cellSize = this.size.width / TamagotchiShape.DEFAULT_GRID_SIZE
+    val radius = halfGridSize * cellSize
+
+    drawCircle(
+        color = color,
+        radius = radius,
+        center = Offset(radius, radius),
+        style = Stroke(width = halfGridSize * 10)
+    )
 }
