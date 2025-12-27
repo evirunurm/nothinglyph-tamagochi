@@ -2,12 +2,14 @@ package com.evirunurm.nothinglyph.tamagotchi.presentation.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import com.evirunurm.nothinglyph.tamagotchi.domain.TamagotchiShape
 
 private val CIRCULAR_BORDER_PATTERN = setOf(
@@ -43,13 +45,19 @@ fun TamagotchiGrid(
     size: Int,
     modifier: Modifier = Modifier
 ) {
-    Canvas(modifier = modifier) {
+    val shape = remember(size) { TamagotchiShape(size) }
+
+    Canvas(
+        modifier = modifier
+            // Use graphicsLayer to cache the canvas drawing
+            .graphicsLayer()
+    ) {
         val cellSize = this.size.width / TamagotchiShape.DEFAULT_GRID_SIZE
 
-        drawBorder(Color(0xFF000000))
+        drawBorder(cellSize, Color(0xFF000000))
         drawBackground(cellSize, Color(0xFF1C1C1C))
-        drawTamagotchiShape(size, cellSize)
-        drawGridLines(cellSize, Color(0xFF000000))
+        drawTamagotchiShape(shape, cellSize)
+        drawGridLines(cellSize, Color(0xFF000000), 10f)
     }
 }
 
@@ -63,9 +71,7 @@ private fun DrawScope.drawBackground(cellSize: Float, color: Color) {
     }
 }
 
-private fun DrawScope.drawTamagotchiShape(size: Int, cellSize: Float) {
-    val shape = TamagotchiShape(size)
-
+private fun DrawScope.drawTamagotchiShape(shape: TamagotchiShape, cellSize: Float) {
     for (x in shape.startX..shape.endX) {
         for (y in shape.startY..shape.endY) {
             if (x in 0..<TamagotchiShape.DEFAULT_GRID_SIZE && y >= 0 && y < TamagotchiShape.DEFAULT_GRID_SIZE) {
@@ -79,23 +85,33 @@ private fun DrawScope.drawTamagotchiShape(size: Int, cellSize: Float) {
     }
 }
 
-private fun DrawScope.drawGridLines(cellSize: Float, color: Color) {
-    val strokeWidth = 10f
+private fun DrawScope.drawGridLines(cellSize: Float, color: Color, strokeWidth: Float) {
+    // Track which lines we've already drawn to avoid duplicates
+    val drawnVerticalLines = mutableSetOf<Pair<Int, Int>>()
+    val drawnHorizontalLines = mutableSetOf<Pair<Int, Int>>()
+
     for ((row, column) in CIRCULAR_BORDER_PATTERN) {
-        // Vertical line
-        drawLine(
-            color = color,
-            start = Offset((row * cellSize), (column * cellSize) - strokeWidth / 2),
-            end = Offset(row * cellSize, ((column + 1) * cellSize) + strokeWidth / 2),
-            strokeWidth = strokeWidth
-        )
-        // Horizontal line
-        drawLine(
-            color = color,
-            start = Offset((row * cellSize) - strokeWidth / 2, column * cellSize),
-            end = Offset(((row + 1) * cellSize) + strokeWidth / 2, column * cellSize),
-            strokeWidth = strokeWidth
-        )
+        // Top horizontal line for a cell
+        if ((row to column) !in drawnHorizontalLines) {
+            drawLine(
+                color = color,
+                start = Offset((row * cellSize) - strokeWidth / 2, column * cellSize),
+                end = Offset(((row + 1) * cellSize) + strokeWidth / 2, column * cellSize),
+                strokeWidth = strokeWidth
+            )
+            drawnHorizontalLines.add(row to column)
+        }
+
+        // Left vertical line for a cell
+        if ((row to column) !in drawnVerticalLines) {
+            drawLine(
+                color = color,
+                start = Offset((row * cellSize), (column * cellSize) - strokeWidth / 2),
+                end = Offset(row * cellSize, ((column + 1) * cellSize) + strokeWidth / 2),
+                strokeWidth = strokeWidth
+            )
+            drawnVerticalLines.add(row to column)
+        }
 
         // Right vertical line, if there's no cell to the right
         if ((row + 1 to column) !in CIRCULAR_BORDER_PATTERN) {
@@ -119,9 +135,8 @@ private fun DrawScope.drawGridLines(cellSize: Float, color: Color) {
     }
 }
 
-private fun DrawScope.drawBorder(color: Color) {
+private fun DrawScope.drawBorder(cellSize: Float, color: Color) {
     val halfGridSize = TamagotchiShape.DEFAULT_GRID_SIZE.toFloat() / 2
-    val cellSize = this.size.width / TamagotchiShape.DEFAULT_GRID_SIZE
     val radius = halfGridSize * cellSize
 
     drawCircle(
