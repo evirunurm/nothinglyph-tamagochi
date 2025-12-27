@@ -1,4 +1,4 @@
-package com.evirunurm.nothinglyph.tamagochi.framework
+package com.evirunurm.nothinglyph.tamagotchi.framework
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.evirunurm.nothinglyph.tamagochi.presentation.screens.TamagochiScreen
+import com.evirunurm.nothinglyph.tamagotchi.presentation.screens.TamagotchiScreen
 import com.evirunurm.nothinglyph.ui.theme.NothingAndroidSDKDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NothingAndroidSDKDemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TamagochiScreen(
+                    TamagotchiScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

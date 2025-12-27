@@ -1,9 +1,9 @@
-package com.evirunurm.nothinglyph.tamagochi.framework.receiver
+package com.evirunurm.nothinglyph.tamagotchi.framework.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.evirunurm.nothinglyph.tamagochi.data.repositories.TamagochiRepository
+import com.evirunurm.nothinglyph.tamagotchi.data.repositories.TamagotchiRepository
 
 /**
  * Broadcast receiver to decrease the size of the square.
@@ -14,7 +14,7 @@ import com.evirunurm.nothinglyph.tamagochi.data.repositories.TamagochiRepository
 class DecreaseReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            val repository = TamagochiRepository.getInstance(it)
+            val repository = TamagotchiRepository.getInstance(it)
             repository.decreaseSize()
         }
     }

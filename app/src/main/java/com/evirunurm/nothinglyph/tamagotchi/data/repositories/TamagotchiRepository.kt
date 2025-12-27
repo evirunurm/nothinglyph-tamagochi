@@ -1,4 +1,4 @@
-package com.evirunurm.nothinglyph.tamagochi.data.repositories
+package com.evirunurm.nothinglyph.tamagotchi.data.repositories
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -11,7 +11,7 @@ import androidx.core.content.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-class TamagochiRepository private constructor(context: Context) {
+class TamagotchiRepository private constructor(context: Context) {
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -42,12 +42,12 @@ class TamagochiRepository private constructor(context: Context) {
 
     fun increaseSize() {
         val currentSize = getSize()
-        val newSize = if (currentSize >= MAX_SIZE) MIN_SIZE else currentSize + 1
+        val newSize = if (currentSize >= MAX_SIZE) MAX_SIZE else currentSize + 1
         setSize(newSize)
     }
 
     fun decreaseSize() {
-        Log.d("TamagochiRepository", "Decreasing size")
+        Log.d("TamagotchiRepository", "Decreasing size")
         val currentSize = getSize()
         if (currentSize > MIN_SIZE) {
             setSize(currentSize - 1)
@@ -55,7 +55,7 @@ class TamagochiRepository private constructor(context: Context) {
     }
 
     private fun broadcastSizeChange(size: Int) {
-        Log.d("TamagochiRepository", "Broadcasting size change: $size")
+        Log.d("TamagotchiRepository", "Broadcasting size change: $size")
         val intent = Intent(ACTION_SIZE_CHANGED).apply {
             putExtra(EXTRA_SIZE, size)
             setPackage(appContext.packageName)
@@ -64,7 +64,7 @@ class TamagochiRepository private constructor(context: Context) {
     }
 
     fun startDecreasing() {
-        Log.d("TamagochiRepository", "Starting alarm for decreasing")
+        Log.d("TamagotchiRepository", "Starting alarm for decreasing")
         if (alarmManager == null) {
             alarmManager = appContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent("DECREASE_SIZE")
@@ -84,7 +84,7 @@ class TamagochiRepository private constructor(context: Context) {
     }
 
     fun stopDecreasing() {
-        Log.d("TamagochiRepository", "Stopping alarm")
+        Log.d("TamagotchiRepository", "Stopping alarm")
         pendingIntent?.let { pi ->
             alarmManager?.cancel(pi)
         }
@@ -93,21 +93,21 @@ class TamagochiRepository private constructor(context: Context) {
     }
 
     companion object {
-        private const val PREFS_NAME = "tamagochi_prefs"
+        private const val PREFS_NAME = "tamagotchi_prefs"
         private const val KEY_SIZE = "size"
         private const val DEFAULT_SIZE = 1
         private const val MIN_SIZE = 1
-        private const val MAX_SIZE = 25
+        private const val MAX_SIZE = 13
 
-        const val ACTION_SIZE_CHANGED = "com.nothinglondon.sdkdemo.TAMAGOCHI_SIZE_CHANGED"
+        const val ACTION_SIZE_CHANGED = "com.nothinglondon.sdkdemo.TAMAGOTCHI_SIZE_CHANGED"
         const val EXTRA_SIZE = "size"
 
         @Volatile
-        private var instance: TamagochiRepository? = null
+        private var instance: TamagotchiRepository? = null
 
-        fun getInstance(context: Context): TamagochiRepository {
+        fun getInstance(context: Context): TamagotchiRepository {
             return instance ?: synchronized(this) {
-                instance ?: TamagochiRepository(context).also { instance = it }
+                instance ?: TamagotchiRepository(context).also { instance = it }
             }
         }
     }

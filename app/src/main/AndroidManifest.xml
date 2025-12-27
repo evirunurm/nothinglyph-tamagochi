@@ -21,7 +21,7 @@
             android:value="test" />
 
         <activity
-            android:name="com.evirunurm.nothinglyph.tamagochi.framework.MainActivity"
+            android:name="com.evirunurm.nothinglyph.tamagotchi.framework.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.NothingAndroidSDKDemo">
             <intent-filter>
@@ -100,9 +100,9 @@
                 android:value="1" />
         </service>
 
-        <!-- Tamagochi Service -->
+        <!-- Tamagotchi Service -->
         <service
-            android:name="com.evirunurm.nothinglyph.tamagochi.framework.service.TamagochiGlyphService"
+            android:name="com.evirunurm.nothinglyph.tamagotchi.framework.service.TamagotchiGlyphService"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
@@ -111,19 +111,19 @@
 
             <meta-data
                 android:name="com.nothing.glyph.toy.name"
-                android:resource="@string/toy_name_tamagochi" />
+                android:resource="@string/toy_name_tamagotchi" />
             <meta-data
                 android:name="com.nothing.glyph.toy.image"
                 android:resource="@drawable/tamagochi_thumbnail" />
             <meta-data
                 android:name="com.nothing.glyph.toy.summary"
-                android:resource="@string/toy_summary_tamagochi" />
+                android:resource="@string/toy_summary_tamagotchi" />
             <meta-data
                 android:name="com.nothing.glyph.toy.longpress"
                 android:value="1" />
         </service>
 
-        <receiver android:name="com.evirunurm.nothinglyph.tamagochi.framework.receiver.DecreaseReceiver"
+        <receiver android:name="com.evirunurm.nothinglyph.tamagotchi.framework.receiver.DecreaseReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="DECREASE_SIZE" />

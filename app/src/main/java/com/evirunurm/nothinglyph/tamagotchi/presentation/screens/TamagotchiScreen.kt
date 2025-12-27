@@ -1,4 +1,4 @@
-package com.evirunurm.nothinglyph.tamagochi.presentation.screens
+package com.evirunurm.nothinglyph.tamagotchi.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,16 +18,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.evirunurm.nothinglyph.tamagochi.presentation.components.TamagochiGrid
-import com.evirunurm.nothinglyph.tamagochi.presentation.viewmodel.TamagochiViewModel
+import com.evirunurm.nothinglyph.tamagotchi.presentation.components.TamagotchiGrid
+import com.evirunurm.nothinglyph.tamagotchi.presentation.viewmodel.TamagotchiViewModel
 
 /**
- * Main screen for the Tamagochi demo.
+ * Main screen for the Tamagotchi demo.
  */
 @Composable
-fun TamagochiScreen(
+fun TamagotchiScreen(
     modifier: Modifier = Modifier,
-    viewModel: TamagochiViewModel = viewModel()
+    viewModel: TamagotchiViewModel = viewModel()
 ) {
     val size by viewModel.size.collectAsState()
 
@@ -39,7 +39,7 @@ fun TamagochiScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Tamagotchi Replica",
+            text = "Tamagotchi",
             style = MaterialTheme.typography.headlineMedium
         )
         
@@ -51,9 +51,8 @@ fun TamagochiScreen(
         )
         
         Spacer(modifier = Modifier.height(32.dp))
-        
-        // Display the square grid
-        TamagochiGrid(
+
+        TamagotchiGrid(
             size = size,
             modifier = Modifier
                 .fillMaxWidth(0.8f)
