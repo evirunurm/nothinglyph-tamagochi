@@ -5,13 +5,15 @@ package com.evirunurm.nothinglyph.tamagotchi.domain
  * Encapsulates the logic for calculating the position and rendering the square shape.
  *
  * @property size The size of the Tamagotchi
+ * @property energy The energy level of the Tamagotchi (0-100)
  * @property gridWidth The width of the glyph grid (default: [GlyphGrid.DEFAULT_GRID_SIZE])
  * @property gridHeight The height of the glyph grid (default: [GlyphGrid.DEFAULT_GRID_SIZE])
  */
 data class TamagotchiShape(
     val size: Int,
+    val energy: Int,
     val gridWidth: Int = GlyphGrid.DEFAULT_GRID_SIZE,
-    val gridHeight: Int = GlyphGrid.DEFAULT_GRID_SIZE
+    val gridHeight: Int = GlyphGrid.DEFAULT_GRID_SIZE,
 ) {
     val visualSize: Int = 2 * size - 1
 
@@ -27,7 +29,7 @@ data class TamagotchiShape(
 
     val endY: Int = center + half
 
-    fun toGlyphArray(brightness: Int = GlyphGrid.MAX_BRIGHTNESS): IntArray {
+    fun toGlyphArray(brightness: Int = (energy / 100.0 * GlyphGrid.MAX_BRIGHTNESS).toInt()): IntArray {
         val array = IntArray(gridWidth * gridHeight)
 
         for (x in startX..endX) {

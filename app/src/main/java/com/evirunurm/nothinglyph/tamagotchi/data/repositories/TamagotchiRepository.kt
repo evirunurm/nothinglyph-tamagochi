@@ -4,12 +4,15 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.os.BatteryManager
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.edit
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.evirunurm.nothinglyph.tamagotchi.framework.receiver.BatteryReceiver
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class TamagotchiRepository private constructor(context: Context) {
 
@@ -18,26 +21,37 @@ class TamagotchiRepository private constructor(context: Context) {
 
     private val appContext = context.applicationContext
 
-    private val _sizeFlow = MutableSharedFlow<Int>(replay = 1)
-    val sizeFlow: Flow<Int> = _sizeFlow
+    private val _sizeFlow = MutableStateFlow(getSize())
+    val sizeFlow: StateFlow<Int> = _sizeFlow
+
+    private val _energyFlow = MutableStateFlow(getCurrentEnergy())
+    val energyFlow: StateFlow<Int> = _energyFlow
 
     private var alarmManager: AlarmManager? = null
     private var pendingIntent: PendingIntent? = null
 
+    private val batteryReceiver = BatteryReceiver { percentage ->
+        _energyFlow.value = percentage
+    }
+
     init {
-        // Emit initial value
-        _sizeFlow.tryEmit(getSize())
+        val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        appContext.registerReceiver(batteryReceiver, filter)
     }
 
     fun getSize(): Int {
         return prefs.getInt(KEY_SIZE, DEFAULT_SIZE)
     }
 
+    fun getCurrentEnergy(): Int {
+        val batteryManager = appContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+        return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+    }
+
     fun setSize(size: Int) {
         val newSize = size.coerceIn(MIN_SIZE, MAX_SIZE)
-        _sizeFlow.tryEmit(newSize)
+        _sizeFlow.value = newSize
         prefs.edit { putInt(KEY_SIZE, newSize) }
-        broadcastSizeChange(newSize)
     }
 
     fun increaseSize() {
@@ -52,15 +66,6 @@ class TamagotchiRepository private constructor(context: Context) {
         if (currentSize > MIN_SIZE) {
             setSize(currentSize - 1)
         }
-    }
-
-    private fun broadcastSizeChange(size: Int) {
-        Log.d("TamagotchiRepository", "Broadcasting size change: $size")
-        val intent = Intent(ACTION_SIZE_CHANGED).apply {
-            putExtra(EXTRA_SIZE, size)
-            setPackage(appContext.packageName)
-        }
-        appContext.sendBroadcast(intent)
     }
 
     fun startDecreasing() {
@@ -99,9 +104,7 @@ class TamagotchiRepository private constructor(context: Context) {
         private const val MIN_SIZE = 1
         private const val MAX_SIZE = 13
 
-        const val ACTION_SIZE_CHANGED = "com.nothinglondon.sdkdemo.TAMAGOTCHI_SIZE_CHANGED"
-        const val EXTRA_SIZE = "size"
-
+        // TODO: What is this??
         @Volatile
         private var instance: TamagotchiRepository? = null
 

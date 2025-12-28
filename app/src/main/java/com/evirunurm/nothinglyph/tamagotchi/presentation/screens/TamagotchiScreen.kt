@@ -29,7 +29,8 @@ fun TamagotchiScreen(
     modifier: Modifier = Modifier,
     viewModel: TamagotchiViewModel = viewModel()
 ) {
-    val size by viewModel.size.collectAsState()
+    val size by viewModel.size.collectAsState(1)
+    val energy by viewModel.energy.collectAsState(0)
 
     Column(
         modifier = modifier
@@ -50,10 +51,18 @@ fun TamagotchiScreen(
             style = MaterialTheme.typography.titleLarge
         )
         
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Energy: $energy%",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         TamagotchiGrid(
             size = size,
+            energy = energy,
             modifier = Modifier
                 .fillMaxWidth(0.8f)
                 .aspectRatio(1f)
@@ -74,4 +83,3 @@ fun TamagotchiScreen(
         )
     }
 }
-

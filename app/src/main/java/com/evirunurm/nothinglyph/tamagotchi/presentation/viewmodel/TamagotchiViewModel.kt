@@ -23,8 +23,14 @@ class TamagotchiViewModel(application: Application) : AndroidViewModel(applicati
             initialValue = repository.getSize()
         )
 
+    val energy: StateFlow<Int> = repository.energyFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = repository.getCurrentEnergy()
+        )
+
     fun decreaseSize() {
         repository.decreaseSize()
     }
 }
-

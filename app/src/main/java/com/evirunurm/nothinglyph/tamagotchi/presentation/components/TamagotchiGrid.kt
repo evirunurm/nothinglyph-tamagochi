@@ -16,9 +16,10 @@ import com.evirunurm.nothinglyph.tamagotchi.domain.TamagotchiShape
 @Composable
 fun TamagotchiGrid(
     size: Int,
+    energy: Int,
     modifier: Modifier = Modifier
 ) {
-    val shape = remember(size) { TamagotchiShape(size) }
+    val shape = remember(size, energy) { TamagotchiShape(size, energy = energy) }
 
     Canvas(
         modifier = modifier
@@ -45,6 +46,7 @@ private fun DrawScope.drawBackground(cellSize: Float, color: Color) {
 }
 
 private fun DrawScope.drawTamagotchiShape(shape: TamagotchiShape, cellSize: Float) {
+    val alpha = shape.energy / 100f
     for (x in shape.startX..shape.endX) {
         for (y in shape.startY..shape.endY) {
             // Draw if the cell is within bounds and the circular pattern
@@ -53,7 +55,7 @@ private fun DrawScope.drawTamagotchiShape(shape: TamagotchiShape, cellSize: Floa
                 y < GlyphGrid.DEFAULT_GRID_SIZE &&
                 (x to y) in GlyphGrid.GRID_PATTERN) {
                 drawRect(
-                    color = Color.White,
+                    color = Color.White.copy(alpha = alpha),
                     topLeft = Offset(x * cellSize, y * cellSize),
                     size = Size(cellSize, cellSize)
                 )
